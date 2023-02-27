@@ -17,7 +17,7 @@ const registerVendor = async (req, res) => {
         const isExist = await vendorModel.findOne({ email: req.body.email });
 
         if (isExist) {
-            res.status(409).send({ exist: false, data: "oops! user already registered with this mail" });
+            res.status(409).send({ exist: false, data: "The email you provided is already registered, please try with a different one" });
         }
         else {
             const save = await regData.save();
@@ -25,7 +25,7 @@ const registerVendor = async (req, res) => {
         }
     }
     catch (error) {
-        res.status(400).send({ file: false, data: "pdf files allowed only" });
+        res.status(400).send({ file: false, data: "PDF files allowed only" });
     }
 }
 
@@ -37,7 +37,7 @@ const loginVendor = async (req, res) => {
         const emailExist = await vendorModel.findOne({ email: email });
 
         if (emailExist === null) {
-            res.status(404).send({ success: false, data: "email not found" });
+            res.status(404).send({ success: false, data: "Email doesn't exist" });
         }
         else {
             var loginVendorData = {
@@ -48,10 +48,10 @@ const loginVendor = async (req, res) => {
                 authorized: emailExist.authorized
             }
             if (emailExist && password !== emailExist.password) {
-                res.status(401).send({ success: false, data: "password is incorrect, please try again" });
+                res.status(401).send({ success: false, data: "Password is incorrect, please try again" });
             }
             else if (emailExist.authorized === false) {
-                res.status(401).send({ success: false, data: "your account is not verified yet! please wait till verified" });
+                res.status(401).send({ success: false, data: "Your account is not verified yet! please wait till verified" });
             }
             else {
                 res.status(200).send({ success: true, data: loginVendorData });
@@ -82,7 +82,7 @@ const resetPasswordVendor = async (req, res) => {
             }
         }
         else {
-            res.status(404).send({ success: false, data: "email does't exist" });
+            res.status(404).send({ success: false, data: "Email does't exist" });
         }
     }
     catch (error) {
@@ -103,11 +103,11 @@ const setNewPasswordVendor = async (req, res) => {
                 { $set: { password: new_password } }
             )
             if (setNew) {
-                res.status(200).send({ success: true, data: "password has been updated successfully, now you can login" })
+                res.status(200).send({ success: true, data: "Password has been updated successfully" })
             }
         }
         else {
-            res.status(404).send({ success: false, data: "user id doesn't exist" });
+            res.status(404).send({ success: false, data: "User doesn't exist" });
         }
     }
     catch (error) {

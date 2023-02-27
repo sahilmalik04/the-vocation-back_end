@@ -16,11 +16,11 @@ const registerUser = async (req, res) => {
 
         const isExist = await userModel.findOne({ email: req.body.email })
         if (isExist) {
-            res.status(409).send({ success: false, data: "oops! user already registered" });
+            res.status(409).send({ success: false, data: "The email you provided is already registered, please try with a different one" });
         }
         else {
-            const save = await userRegData.save();
-            res.status(200).send({ success: true, data: save });
+            await userRegData.save();
+            res.status(200).send({ success: true, data: "Your account has been registered successfully. We've send you an email to verify your account" });
         }
 
     }
@@ -42,7 +42,6 @@ const loginUser = async (req, res) => {
                 first_name: emailExist.first_name,
                 last_name: emailExist.last_name,
                 email: emailExist.email,
-                type: ''
             }
             if (emailExist.email === 'admin@gmail.com') {
                 loginUserData.type = 'admin'
@@ -51,14 +50,14 @@ const loginUser = async (req, res) => {
                 loginUserData.type = 'user'
             }
             if (emailExist && password !== emailExist.password) {
-                res.status(401).send({ success: false, data: "password is incorrect, please try again" });
+                res.status(401).send({ success: false, data: "Password is incorrect, please try again" });
             }
             else {
                 res.status(200).send({ success: true, data: loginUserData });
             }
         }
         else {
-            res.status(404).send({ success: false, data: "email not found" });
+            res.status(404).send({ success: false, data: "Email doesn't exist" });
         }
     }
     catch (error) {
@@ -78,13 +77,13 @@ const resetPasswordUser = async (req, res) => {
 
             const result = await sendMail(forgotmail, html, subject);
             if (result.success === true) {
-                res.status(200).send({ success: true, data: "email has been sent successfully" });
+                res.status(200).send({ success: true, data: "Email has been sent successfully" });
             }
-            else{
+            else {
                 res.status(400).send(result);
             }
         } else {
-            res.status(404).send({ success: false, data: "email does't exist" });
+            res.status(404).send({ success: false, data: "Email does't exist" });
         }
     }
     catch (error) {
@@ -105,11 +104,11 @@ const setNewPasswordUser = async (req, res) => {
                 { $set: { password: new_password } }
             )
             if (setNew) {
-                res.status(200).send({ success: true, data: "password has been updated successfully, now you can login" })
+                res.status(200).send({ success: true, data: "Password has been updated successfully, now you can login" })
             }
         }
         else {
-            res.status(404).send({ success: false, data: "user id doesn't exist" });
+            res.status(404).send({ success: false, data: "User doesn't exist" });
         }
 
     }

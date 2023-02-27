@@ -3,7 +3,7 @@
 # dependencies
 /node_modules
 
-public/
+public/vendor_IDProof
 
 # testing
 
