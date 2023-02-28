@@ -10,10 +10,10 @@ const registerVendor = async (req, res) => {
             password: req.body.password,
             id_proof: req.file.filename,
             type: 'vendor',
-            authorized: false
+            authorized: false,
+            isDeleted: false
         })
 
-        // console.log(regData)
         const isExist = await vendorModel.findOne({ email: req.body.email });
 
         if (isExist) {

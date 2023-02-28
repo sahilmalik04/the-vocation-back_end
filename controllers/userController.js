@@ -11,7 +11,9 @@ const registerUser = async (req, res) => {
             city: req.body.city,
             country: req.body.country,
             phone: req.body.phone,
-            type: 'user'
+            type: 'user',
+            isVerified: false,
+            isDeleted: false
         })
 
         const isExist = await userModel.findOne({ email: req.body.email })
@@ -20,6 +22,10 @@ const registerUser = async (req, res) => {
         }
         else {
             await userRegData.save();
+            const email = req.body.email
+            const html = `<div style="padding: 5px"> Hi, <br></br> Please click on button below to verify your account <br></br> <a href="http://localhost:3000/verify_account/">Verify Account</a> <br></br><br></br>Thanks, <div>Team TheVocation</div> </div>`
+            const subject = 'Verify Your Account'
+            await sendMail(email, html, subject);
             res.status(200).send({ success: true, data: "Your account has been registered successfully. We've send you an email to verify your account" });
         }
 

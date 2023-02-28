@@ -25,10 +25,20 @@ const vendorModel = mongoose.Schema({
         type: String,
         required: true
     },
-    authorized:{
-        type:Boolean,
+    authorized: {
+        type: Boolean,
         Request: true
+    },
+    isVerified: {
+        type: Boolean
+    },
+    isDeleted: {
+        type: Boolean
     }
-})
+},
+    {
+        timestamps: true
+    }
+)
 
 module.exports = mongoose.model('vendor', vendorModel);
